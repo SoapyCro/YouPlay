@@ -29,58 +29,13 @@
         <Button
             android:layout_width="35dp"
             android:layout_height="35dp"
-            android:id="@+id/button"
+            android:id="@+id/search_button"
             android:background="@drawable/search_icon2"
             android:paddingBottom="2dp"/>
     </LinearLayout>
-    <ScrollView
+    <ListView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/myOutputBox"
-                android:text=""/>
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="100dp"
-                android:text="New Button"
-                android:id="@+id/button2" />
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="100dp"
-                android:text="New Button"
-                android:id="@+id/button3" />
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="100dp"
-                android:text="New Button"
-                android:id="@+id/button4" />
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="100dp"
-                android:text="New Button"
-                android:id="@+id/button5" />
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="100dp"
-                android:text="New Button"
-                android:id="@+id/button6" />
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="100dp"
-                android:text="New Button"
-                android:id="@+id/button7" />
-        </LinearLayout>
-
-    </ScrollView>
+        android:layout_height="match_parent"
+        android:id="@+id/listView">
+    </ListView>
 </LinearLayout>
