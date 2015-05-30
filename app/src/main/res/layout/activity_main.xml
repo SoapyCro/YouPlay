@@ -24,6 +24,7 @@
             android:paddingLeft="6dp"
             android:paddingRight="6dp"
             android:inputType="text"
+            android:completionThreshold="1"
             android:dropDownWidth="312dp"/>
 
         <Button

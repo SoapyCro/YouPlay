@@ -1,17 +1,74 @@
 package hr.leon.croapps.youplay;
 
+import android.graphics.Bitmap;
+
 public class Item {
     private String title;
     private String imageUrl;
     private String id;
+    private String likes;
+    private String dislikes;
+    private String views;
+    private Bitmap bmp;
+    private String duration;
 
-    public Item(){
+    public String getDuration() {
+        return duration;
+    }
+
+    public void setDuration(String duration) {
+        this.duration = duration;
+    }
+
+    public Bitmap getBmp() {
+        return bmp;
+    }
+
+    public void setBmp(Bitmap bmp) {
+        this.bmp = bmp;
+    }
+
+    public String getLikes() {
+        return likes;
+    }
+
+    public void setLikes(String likes) {
+        this.likes = likes;
+    }
+
+    public String getDislikes() {
+        return dislikes;
+    }
+
+    public void setDislikes(String dislikes) {
+        this.dislikes = dislikes;
+    }
+
+    public String getViews() {
+        return views;
+    }
+
+    public void setViews(String views) {
+        this.views = views;
+    }
+
+    public Item() {
         super();
     }
+
     public Item(String title, String imageUrl, String id) {
         this.title = title;
         this.imageUrl = imageUrl;
         this.id = id;
+    }
+
+    public Item(String title, String dislikes, String likes, String id, String imageUrl, String views) {
+        this.title = title;
+        this.dislikes = dislikes;
+        this.likes = likes;
+        this.id = id;
+        this.imageUrl = imageUrl;
+        this.views = views;
     }
 
     public String getTitle() {
