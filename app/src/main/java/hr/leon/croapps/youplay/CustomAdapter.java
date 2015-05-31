@@ -2,29 +2,26 @@ package hr.leon.croapps.youplay;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.joda.time.Duration;
+
 import org.joda.time.Hours;
 import org.joda.time.Minutes;
 import org.joda.time.Period;
 import org.joda.time.Seconds;
 import org.joda.time.format.ISOPeriodFormat;
 import org.joda.time.format.PeriodFormatter;
-import org.w3c.dom.Text;
 
-import java.io.InputStream;
-import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.List;
+
+// ovdje se obavljaju radnje nad ListViewom s custom layoutom
 
 public class CustomAdapter extends ArrayAdapter<Item> {
 
@@ -35,17 +32,20 @@ public class CustomAdapter extends ArrayAdapter<Item> {
         private TextView dislikeCount;
         private TextView videoDuration;
         private ImageView thumbnail;
+
     }
 
     public CustomAdapter(Context context, ArrayList<Item> list) {
         super(context, R.layout.custom_listview, list);
+
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        ViewHolder viewHolder = null;
-        Item item = getItem(position);
+        ViewHolder viewHolder;
+        final Item item = getItem(position);
+        // implementirano za smooth scrolling
         if (convertView == null) {
 
             LayoutInflater inflater = LayoutInflater.from(getContext());
@@ -59,13 +59,26 @@ public class CustomAdapter extends ArrayAdapter<Item> {
             viewHolder.videoDuration = (TextView) convertView.findViewById(R.id.videoDuration);
             viewHolder.thumbnail = (ImageView) convertView.findViewById(R.id.thumbnail);
 
+            // postavljamo vrijednosti pojedinog elementa u ListViewu
             globalSet(item, viewHolder);
-
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
             globalSet(item, viewHolder);
         }
+
+        Button moreButton = (Button) convertView.findViewById(R.id.more_button);
+        moreButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Button button = (Button) v.findViewById(R.id.more_button);
+                button.setBackgroundResource(R.drawable.btn_more);
+
+                CustomDialog cdd=new CustomDialog((android.app.Activity) getContext(), item);
+                cdd.show();
+            }
+        });
+
         return convertView;
     }
 
@@ -82,6 +95,9 @@ public class CustomAdapter extends ArrayAdapter<Item> {
         viewHolder.dislikeCount.setText(item.getDislikes());
     }
 
+    // posto youtube vraca duration u formatu PST1H1M1S, parseaj to
+    // ako su minute i sekunde < 10, dodaj nulu ispred radi preglednosti
+    // npr. 1:10:10
     private String convertTime(String duration) {
         PeriodFormatter formatter = ISOPeriodFormat.standard();
         Period p = formatter.parsePeriod(duration);

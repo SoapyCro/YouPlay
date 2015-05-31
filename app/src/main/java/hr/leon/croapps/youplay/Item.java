@@ -56,21 +56,6 @@ public class Item {
         super();
     }
 
-    public Item(String title, String imageUrl, String id) {
-        this.title = title;
-        this.imageUrl = imageUrl;
-        this.id = id;
-    }
-
-    public Item(String title, String dislikes, String likes, String id, String imageUrl, String views) {
-        this.title = title;
-        this.dislikes = dislikes;
-        this.likes = likes;
-        this.id = id;
-        this.imageUrl = imageUrl;
-        this.views = views;
-    }
-
     public String getTitle() {
         return title;
     }

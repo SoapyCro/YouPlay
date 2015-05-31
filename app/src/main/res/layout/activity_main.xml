@@ -25,7 +25,8 @@
             android:paddingRight="6dp"
             android:inputType="text"
             android:completionThreshold="1"
-            android:dropDownWidth="312dp"/>
+            android:dropDownWidth="312dp"
+            android:imeOptions="actionDone"/>
 
         <Button
             android:layout_width="35dp"
