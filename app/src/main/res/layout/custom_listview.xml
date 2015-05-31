@@ -95,7 +95,7 @@
                 android:layout_width="15dp"
                 android:layout_height="15dp"
                 android:id="@+id/imageView"
-                android:background="@drawable/upButton"
+                android:background="@drawable/upbutton"
                 android:layout_marginLeft="0dp"
                 android:layout_marginRight="5dp"
                 android:layout_marginTop="1dp" />
@@ -113,7 +113,7 @@
                 android:layout_width="15dp"
                 android:layout_height="15dp"
                 android:id="@+id/imageView2"
-                android:background="@drawable/downButton"
+                android:background="@drawable/downbutton"
                 android:layout_marginRight="5dp"
                 android:layout_marginTop="2dp" />
 

@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
@@ -54,6 +53,10 @@ public class CustomDialog extends Dialog implements
                 String sec = text.getText().toString();
                 intent.putExtra("startTime", sec);
                 c.startActivity(intent);
+                if(c instanceof PlayerActivity) {
+                    c.finish();
+
+                }
                 break;
             case R.id.btn_no:
                 InputMethodManager imm = (InputMethodManager) c.getSystemService(Context.INPUT_METHOD_SERVICE);

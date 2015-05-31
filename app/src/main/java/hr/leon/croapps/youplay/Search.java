@@ -23,17 +23,18 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-
 public class Search {
-    private YouTube youtube;
-    ArrayList<Item> tempList = new ArrayList<>();
+
+    private ArrayList<Item> tempList = new ArrayList<>();
+    private String nextPage = "";
 
     public ArrayList<Item> getTempList(){
         return tempList;
     }
 
-    public void start(String query, long numberOfVideos) {
+    public void start(String query, long numberOfVideos, int pageNum, String relatedToId) {
         try {
+            YouTube youtube;
             // prvo cemo naci sve ID-ove od videa koje nade
             youtube = new YouTube.Builder(new NetHttpTransport(), new JacksonFactory(),
                     new HttpRequestInitializer() {
@@ -49,11 +50,33 @@ public class Search {
             search.setQ(query);
             search.setType("video");
 
+            if(relatedToId.length() > 2)
+                search.setRelatedToVideoId(relatedToId);
+
             search.setMaxResults(numberOfVideos);
+            SearchListResponse searchResponse;
 
-            SearchListResponse searchResponse = search.execute();
-            List<SearchResult> searchResultList = searchResponse.getItems();
+            if(pageNum == 0) {
+                nextPage = "";
+                if(!tempList.isEmpty())
+                    tempList.clear();
+            }
+            if(nextPage != null) {
+                if (nextPage.length() < 2) {
+                    searchResponse = search.execute();
+                    nextPage = searchResponse.getNextPageToken();
+                } else {
+                    search.setPageToken(nextPage);
+                    searchResponse = search.execute();
+                    nextPage = searchResponse.getNextPageToken();
+                }
+            }else searchResponse = null;
 
+            List<SearchResult> searchResultList = null;
+
+            if(searchResponse != null) {
+                searchResultList = searchResponse.getItems();
+            }
             List<String> videoIds = new ArrayList<>();
             // ako je nesto nasao
             if (searchResultList != null) {

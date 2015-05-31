@@ -13,13 +13,14 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:id="@+id/linearLayout">
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginBottom="10dp"
-            android:background="#ff565656">
+            android:orientation="vertical">
 
             <com.google.android.youtube.player.YouTubePlayerView
                 android:id="@+id/youtube_player"
@@ -32,8 +33,7 @@
                 android:layout_height="wrap_content"
                 android:background="#ff505050"
                 android:weightSum="1"
-                android:gravity="center_horizontal"
-                android:layout_marginTop="4dp">
+                android:gravity="center_horizontal">
 
                 <Button
                     android:layout_width="40dp"
@@ -97,11 +97,7 @@
             </LinearLayout>
 
         </LinearLayout>
-        <ListView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/listView">
-        </ListView>
+        </ScrollView>
     </LinearLayout>
 
 </LinearLayout>

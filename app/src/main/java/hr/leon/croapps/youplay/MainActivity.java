@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -20,6 +21,7 @@ import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -29,7 +31,12 @@ public class MainActivity extends Activity {
 
     boolean searchStarted = false;
     private static final long NUMBER_OF_VIDEOS_RETURNED = 15;
-
+    private int preLast;
+    private int pageNum = 0;
+    private Search search = new Search();
+    private boolean showDone = false;
+    private ListAdapter adapter;
+    private Toast loadingMore;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +44,8 @@ public class MainActivity extends Activity {
         // tema bez actionbara
         setTheme(android.R.style.Theme_Holo_Light_NoActionBar);
         setContentView(R.layout.activity_main);
+
+        showResults(" ");
 
         // unos search quarrya i prikazz suggested quarrya
         AutoCompleteTextView editText = (AutoCompleteTextView) findViewById(R.id.editText);
@@ -77,6 +86,27 @@ public class MainActivity extends Activity {
             }
         });
 
+        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                final int lastItem = firstVisibleItem + visibleItemCount;
+                int lastInScreen = firstVisibleItem + visibleItemCount;
+                if((lastInScreen == totalItemCount && showDone) ) {
+                    if(preLast!=lastItem){
+                        preLast = lastItem;
+                        AutoCompleteTextView editText = (AutoCompleteTextView) findViewById(R.id.editText);
+                        pageNum++;
+                        showResults(editText.getText().toString());
+                    }
+                }
+            }
+        });
+
+
         // kad user klikne na dropdown od autocompletetextviewa zapocni pretragu, makni tipkovnicu i skloni dropdown
         editText.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -88,6 +118,7 @@ public class MainActivity extends Activity {
                 // dropdown
                 editText.dismissDropDown();
                 // trazi rezultate i prikazi ih
+                pageNum = 0;
                 showResults(editText.getText().toString());
             }
         });
@@ -101,6 +132,7 @@ public class MainActivity extends Activity {
                     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
                     editText.dismissDropDown();
+                    pageNum = 0;
                     showResults(editText.getText().toString());
                     return true;
                 }
@@ -120,6 +152,7 @@ public class MainActivity extends Activity {
                 AutoCompleteTextView editText = (AutoCompleteTextView) findViewById(R.id.editText);
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
+                pageNum = 0;
                 if (!searchStarted) {
                     showResults(editText.getText().toString());
                     searchStarted = true;
@@ -133,14 +166,25 @@ public class MainActivity extends Activity {
             @Override
             protected ArrayList<Item> doInBackground(String... params) {
                 // nadi search rezultate i napuni ih u listu
-                Search search = new Search();
-                search.start(params[0], NUMBER_OF_VIDEOS_RETURNED);
+                search.start(params[0], NUMBER_OF_VIDEOS_RETURNED, pageNum, "0");
                 return search.getTempList();
             }
 
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
+
+                showDone = false;
+                if(loadingMore == null)
+                    loadingMore = Toast.makeText(MainActivity.this, "", Toast.LENGTH_LONG);
+
+                if(loadingMore.getView().getWindowVisibility() == View.VISIBLE){
+                    loadingMore.cancel();
+                }
+
+                loadingMore.setDuration(Toast.LENGTH_LONG);
+                loadingMore.setText("Loading...");
+                loadingMore.show();
             }
 
             @Override
@@ -153,10 +197,24 @@ public class MainActivity extends Activity {
                 //Toast.makeText(MainActivity.this, list.get(6).getTitle(), Toast.LENGTH_LONG).show();
 
                 // prikazi rezultate pretrage u CustomAdapteru
-                ListAdapter adapter = new CustomAdapter(MainActivity.this, list);
                 ListView listView = (ListView) findViewById(R.id.listView);
+                int index = listView.getFirstVisiblePosition();
+                View v = listView.getChildAt(0);
+                int top = (v == null) ? 0 : v.getTop();
+                adapter = new CustomAdapter(MainActivity.this, list);
                 listView.setAdapter(adapter);
+                listView.requestLayout();
+                if(pageNum != 0) listView.setSelectionFromTop(index, top);
+
+                if(loadingMore.getView().getWindowVisibility() == View.VISIBLE){
+                    loadingMore.cancel();
+                }
+                loadingMore.setText("Done");
+                loadingMore.setDuration(Toast.LENGTH_LONG);
+                loadingMore.show();
+
                 searchStarted = false;
+                showDone = true;
             }
         };
         task.execute(s);

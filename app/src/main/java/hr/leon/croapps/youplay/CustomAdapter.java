@@ -74,13 +74,13 @@ public class CustomAdapter extends ArrayAdapter<Item> {
                 Button button = (Button) v.findViewById(R.id.more_button);
                 button.setBackgroundResource(R.drawable.btn_more);
 
-                CustomDialog cdd=new CustomDialog((android.app.Activity) getContext(), item);
+                CustomDialog cdd = new CustomDialog((android.app.Activity) getContext(), item);
                 cdd.show();
             }
         });
-
         return convertView;
     }
+
 
     private void globalSet(Item item, ViewHolder viewHolder) {
         long views = Integer.parseInt(item.getViews());
