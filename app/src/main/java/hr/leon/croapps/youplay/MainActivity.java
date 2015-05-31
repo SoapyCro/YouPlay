@@ -25,8 +25,6 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-// TODO progress bar dodaj u async task!!!!!!!
-
 public class MainActivity extends Activity {
 
     boolean searchStarted = false;
