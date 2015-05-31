@@ -1,0 +1,1 @@
+Sve potrebne informacije o aplikaciji mogu se naæi u datoteci YouPlay Documentation.pdf koja se nalazi u istom folderu kao i README.
